@@ -1,15 +1,22 @@
 defmodule Identicon do
+  @moduledoc """
+    Provides methods to create an Identicon image given a string input
+  """
+
   def main(input) do
     input
     |> hash_input
     |> pick_color
-    |> build_grid
-    |> filter_odd_squares
-    |> build_pixel_map
-    |> draw_image
-    |> save_image(input)
+    # |> build_grid
+    # |> filter_odd_squares
+    # |> build_pixel_map
+    # |> draw_image
+    # |> save_image(input)
   end
   
+  @doc """
+    Create a hexadecimal array
+  """
   def hash_input(input) do
     hex = :crypto.hash(:md5, input)
     |> :binary.bin_to_list
@@ -17,10 +24,32 @@ defmodule Identicon do
     %Identicon.Image{hex: hex}
   end
   
+  @doc """
+    Picks the first three pixels from the hexadecimal array to represent the color for the Identicon
+
+    ## Examples
+
+          iex> image = Identicon.hash_input("asdf")
+          iex> Identicon.pick_color(image)
+          %Identicon.Image{
+            color: {145, 46, 200},
+            grid: nil,
+            hex: [145, 46, 200, 3, 178, 206, 73, 228, 165, 65, 6, 141, 73, 90, 181, 112],
+            pixel_map: nil
+          }
+  """
   def pick_color(%Identicon.Image{hex: [r,g,b | _tail]}=image) do
     %Identicon.Image{image | color: {r,g,b}}
   end
   
+  @doc """
+    Mirrors a array taking the third element as a an axis
+
+    ## Examples
+
+          iex> Identicon.mirror_row([1,2,3])
+          [1,2,3,2,1]
+  """
   def mirror_row(row) do
     [first, second | _tail] = row
     row ++ [second, first]
