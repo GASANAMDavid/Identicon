@@ -1,5 +1,7 @@
 # Identicon
 
+This is an Elixir project that builds an Identicon from a sting input 
+
 **TODO: Add description**
 
 ## Installation
